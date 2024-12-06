@@ -1,0 +1,35 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="400"
+             x:Class="Mamilots_POS.Views.FluentSplashScreenView">
+	<UserControl.Resources>
+		<FontFamily x:Key="Montserrat">C:\Users\Jelo\source\repos\Mamilots POS\Assets\Fonts\Montserrat\Montserrat.ttf#Montserrat</FontFamily>
+		<LinearGradientBrush x:Key="MyGradientBrush" StartPoint="0%,0%" EndPoint="0%,100%">
+			<GradientStop Offset="0.6" Color="#FFCA40"/>
+			<GradientStop Offset="1" Color="#FFC340"/>
+		</LinearGradientBrush>
+	</UserControl.Resources>
+	
+	<Panel Background="{StaticResource MyGradientBrush}">
+		<StackPanel Spacing="10"
+					VerticalAlignment="Center">
+			<Image Source="C:\Users\Jelo\source\repos\Mamilots POS\Assets\Images\mamilots.png"
+				   MaxWidth="400"
+				   Margin="0, 30" />
+
+			<ProgressBar Name="ProgressBar1"
+						 MaxWidth="200"
+						 Margin="0" />
+
+			<TextBlock Text="Loading..."
+					   Name="LoadingText"
+					   HorizontalAlignment="Center"
+					   FontSize="20"
+					   Foreground="Black" 
+					   FontFamily="Montserrat"
+					   FontWeight="Medium"/>
+		</StackPanel>
+	</Panel>
+</UserControl>

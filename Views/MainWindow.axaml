@@ -1,0 +1,101 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:Mamilots_POS.ViewModels;assembly=Mamilots_POS"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1024"
+        x:Class="Mamilots_POS.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="Mamilot's"
+        WindowState="Maximized"
+		MinWidth="799">
+
+	<Window.Resources>
+		<FontFamily x:Key="Montserrat">C:\Users\Jelo\source\repos\Mamilots POS\Assets\Fonts\Montserrat\Montserrat.ttf#Montserrat</FontFamily>
+		<LinearGradientBrush x:Key="MyGradientBrush" StartPoint="0%,0%" EndPoint="0%,100%">
+			<GradientStop Offset="0.6" Color="#FFCA40"/>
+			<GradientStop Offset="1" Color="#FFC340"/>
+		</LinearGradientBrush>
+	</Window.Resources>
+
+	<Window.Styles>
+		<Style Selector="Button:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Background" Value="#FFCA40" />
+		</Style>
+
+		<Style Selector="Button#BtnCollapse:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Background" Value="LightGray" />
+		</Style>
+
+		<Style Selector="#BtnLog:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Background" Value="LightGray"/>
+		</Style>
+	</Window.Styles>
+
+	<Grid RowDefinitions="Auto, *">
+		<Border Grid.Row="0" Height="32" Background="#808080">
+			<Grid VerticalAlignment="Center" Margin="10,0">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto"/>
+					<ColumnDefinition Width="*"/>
+				</Grid.ColumnDefinitions>
+				<Image Source="C:/Users/Jelo/source/repos/Mamilots POS/Assets/Images/mamilotsIcon.png"
+                       Width="25" Height="25" Margin="0,0,5,0" Grid.Column="0"/>
+				<TextBlock Text="{Binding Title, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                           VerticalAlignment="Center" Grid.Column="1"/>
+			</Grid>
+		</Border>
+
+		<SplitView Grid.Row="1"
+                   IsPaneOpen="{Binding IsPaneOpen}"
+                   OpenPaneLength="300"
+                   CompactPaneLength="{Binding PaneLength}"
+                   DisplayMode="CompactInline"
+                   Background="#808080"
+                   PaneBackground="#808080">
+			<SplitView.Pane>
+				<Border Name="Colla" CornerRadius="8" Background="{StaticResource MyGradientBrush}" Margin="5">
+					<DockPanel>
+						<Button DockPanel.Dock="Top" Width="40" 
+								Name="BtnCollapse" 
+								Command="{Binding TriggerPaneCommand}" 
+								Margin="8, 20, 0, 0"
+								Background="White">
+							<PathIcon Data="{StaticResource linehorizontal3regular}"></PathIcon>
+						</Button>
+						<ListBox DockPanel.Dock="Top" Background="Transparent"
+                                 ItemsSource="{Binding Items}"
+                                 SelectedItem="{Binding SelectedListItem}"
+                                 Cursor="Hand"
+                                 Margin="0 0 -100 0" Padding="0">
+							<ListBox.ItemTemplate>
+								<DataTemplate DataType="{x:Type vm:ListItemTemplate}">
+									<StackPanel Spacing="21" Orientation="Horizontal">
+										<PathIcon Data="{Binding ListItemIcon}"/>
+										<TextBlock Text="{Binding Label}"
+                                                   FontFamily="Montserrat"
+                                                   FontWeight="Medium"
+                                                   Margin="0 2 0 0"/>
+									</StackPanel>
+								</DataTemplate>
+							</ListBox.ItemTemplate>
+						</ListBox>
+						<Button DockPanel.Dock="Bottom" 
+								HorizontalAlignment="Stretch" 
+								VerticalAlignment="Bottom" Margin="90 50" Height="35"
+								Command="{Binding LogOutCommand}"
+								Content="{Binding LabelLog}" FontFamily="Montserrat" FontWeight="Medium"
+								Name="BtnLog" Background="{Binding BtnColor}" Foreground="{Binding LblColor}" 
+								CornerRadius="4"/>
+					</DockPanel>
+				</Border>
+			</SplitView.Pane>
+			<SplitView.Content>
+				<Border CornerRadius="8" Background="white" Margin="0 5 5 5">
+					<TransitioningContentControl Content="{Binding CurrentPage}"/>
+				</Border>
+			</SplitView.Content>
+		</SplitView>
+	</Grid>
+</Window>
