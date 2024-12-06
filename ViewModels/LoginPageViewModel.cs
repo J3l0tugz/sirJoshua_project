@@ -22,6 +22,7 @@ namespace Mamilots_POS.ViewModels
         [ObservableProperty] private IReadOnlyList<DummyUser> _availableUsers = [];
         [ObservableProperty] private DummyUser? _selectedUser;
 
+
         partial void OnSelectedUserChanged(DummyUser? value)
         {
             if (value is null) return;
@@ -33,14 +34,23 @@ namespace Mamilots_POS.ViewModels
         private readonly ILoginService _loginService;
         private readonly IMessenger _messenger;
 
-        public LoginPageViewModel() : this(new LoginService(new HttpClient { BaseAddress = new Uri("https://dummyjson.com/") }), MessengerInstance.Instance) { }
-       
-            public LoginPageViewModel(ILoginService loginService, IMessenger messenger)
+        public LoginPageViewModel() : this(new LoginService(new HttpClient { BaseAddress = new Uri("https://dummyjson.com/") }), MessengerInstance.Instance) 
+        {
+            // Initialize commands
+            AdminTrueCommand = new RelayCommand(() => WeakReferenceMessenger.Default.Send(new GuestModeMessage()));
+        }
+
+        public LoginPageViewModel(ILoginService loginService, IMessenger messenger)
         {
             _loginService = loginService;
             _messenger = messenger;
             _ = GetUsers();
+
+            // Initialize commands
+            AdminTrueCommand = new RelayCommand(() => WeakReferenceMessenger.Default.Send(new GuestModeMessage()));
         }
+
+        public IRelayCommand AdminTrueCommand { get; }
 
         //public LoginPageViewModel() : this(new LoginService(new HttpClient { BaseAddress = new Uri("https://dummyjson.com/")}), new WeakReferenceMessenger()) { }
 

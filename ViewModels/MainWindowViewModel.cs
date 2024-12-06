@@ -9,105 +9,131 @@ using Mamilots_POS.Utilities;
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Linq;
 
-namespace Mamilots_POS.ViewModels;
-
-/// <summary>
-/// The main window view model.
-/// </summary>
-public partial class MainWindowViewModel : ViewModelBase
+namespace Mamilots_POS.ViewModels
 {
-    
-    public MainWindowViewModel() : this(MessengerInstance.Instance) { }
-    public MainWindowViewModel(IMessenger messenger)
+    public partial class MainWindowViewModel : ViewModelBase
     {
-        messenger.Register<MainWindowViewModel, LoginSuccessMessage>(this, (recipient, message) =>
-        {
-            CurrentPage = new ProductsPageViewModel(message.Value);
-            //CurrentPage = new SecretViewModel(message.Value);
-            Trace.WriteLine("LoginSuccessMessage received with value: " + message.Value);
+        private ListItemTemplate _historyItem;
 
-            LabelLog = "Logout";
-            BtnColor = new SolidColorBrush(Colors.Red);
-            LblColor = new SolidColorBrush(Colors.White);
-            IsPaneOpen = true;
-            PaneLength = 65;
-        });
+        public MainWindowViewModel() : this(MessengerInstance.Instance) { }
+
+        public MainWindowViewModel(IMessenger messenger)
+        {
+            _historyItem = new ListItemTemplate(typeof(HistoryPageViewModel), "historyregular");
+
+            messenger.Register<MainWindowViewModel, LoginSuccessMessage>(this, (recipient, message) =>
+            {
+                CurrentPage = new ProductsPageViewModel(message.Value);
+                Trace.WriteLine("LoginSuccessMessage received with value: " + message.Value);
+
+                LabelLog = "Logout";
+                BtnColor = new SolidColorBrush(Colors.Red);
+                LblColor = new SolidColorBrush(Colors.White);
+                IsPaneOpen = true;
+                PaneLength = 65;
+
+                // Set the selected item to ProductsPageViewModel after login
+                SelectedListItem = Items.FirstOrDefault(item => item.ModelType == typeof(ProductsPageViewModel));
+
+                // Add HistoryPageViewModel to the list
+                Items.Add(_historyItem);
+            });
+
             IsPaneOpen = false;
 
-        messenger.Register<MainWindowViewModel, LogOutMessage>(this, (recipient, message) =>
+            messenger.Register<MainWindowViewModel, LogOutMessage>(this, (recipient, message) =>
+            {
+                CurrentPage = new LoginPageViewModel();
+                IsPaneOpen = false;
+                PaneLength = 5;
+
+                // Remove HistoryPageViewModel from the list
+                Items.Remove(_historyItem);
+            });
+
+            messenger.Register<MainWindowViewModel, GuestModeMessage>(this, (recipient, message) =>
+            {
+                CurrentPage = new ProductsPageViewModel();
+                IsPaneOpen = false;
+
+                LabelLog = "Login";
+                BtnColor = new SolidColorBrush(Colors.White);
+                LblColor = new SolidColorBrush(Colors.Black);
+                PaneLength = 65;
+
+                // Remove HistoryPageViewModel for guest mode
+                Items.Remove(_historyItem);
+            });
+        }
+
+        [ObservableProperty]
+        private bool _isPaneOpen;
+
+        [ObservableProperty]
+        private ViewModelBase _currentPage = new LoginPageViewModel();
+
+        [ObservableProperty]
+        private ListItemTemplate? _selectedListItem;
+
+        partial void OnSelectedListItemChanged(ListItemTemplate? value)
         {
-            CurrentPage = new LoginPageViewModel();
-        });
+            if (value is null) return;
+            var instance = Activator.CreateInstance(value.ModelType);
+            if (instance is null) return;
+            CurrentPage = (ViewModelBase)instance;
+        }
+
+        public ObservableCollection<ListItemTemplate> Items { get; } = new ObservableCollection<ListItemTemplate>
+        {
+            new ListItemTemplate(typeof(ProductsPageViewModel), "buildingshopregular")
+        };
+
+        [ObservableProperty]
+        private string _labelLog = "Login";
+
+        [ObservableProperty]
+        private Brush _btnColor = new SolidColorBrush(Colors.White);
+
+        [ObservableProperty]
+        private Brush _lblColor = new SolidColorBrush(Colors.Black);
+
+        [ObservableProperty]
+        private int _paneLength = 5;
+
+        [RelayCommand]
+        private void TriggerPane()
+        {
+            IsPaneOpen = !IsPaneOpen;
+        }
+
+        [RelayCommand]
+        private void LogOut()
+        {
+            WeakReferenceMessenger.Default.Send(new LogOutMessage());
+        }
+
+        [RelayCommand]
+        private void IsAdminTrue()
+        {
+            WeakReferenceMessenger.Default.Send(new AdminFalseMessage());
+        }
     }
 
-
-    [ObservableProperty]
-    private bool _isPaneOpen;
-
-    [ObservableProperty]
-    private ViewModelBase _currentPage = new LoginPageViewModel();
-
-    [ObservableProperty]
-    private ListItemTemplate? _selectedListItem;
-
-    partial void OnSelectedListItemChanged(ListItemTemplate? value)
+    public class ListItemTemplate
     {
-        if (value is null) return;
-        var instance = Activator.CreateInstance(value.ModelType);
-        if (instance is null) return;
-        CurrentPage = (ViewModelBase)instance;
-    }
+        public ListItemTemplate(Type type, string iconKey)
+        {
+            ModelType = type;
+            Label = type.Name.Replace("PageViewModel", "");
 
-    public ObservableCollection<ListItemTemplate> Items { get; } =
-    [
-            new ListItemTemplate(typeof(ProductsPageViewModel), "buildingshopregular"),
-            new ListItemTemplate(typeof(HistoryPageViewModel), "historyregular"),
-    ];
+            Application.Current!.TryFindResource(iconKey, out var res);
+            ListItemIcon = (StreamGeometry)res!;
+        }
+        public string Label { get; }
 
-    [ObservableProperty]
-    private string _labelLog = "Login";
-
-    [ObservableProperty]
-    private Brush _btnColor = new SolidColorBrush(Colors.White);
-
-    [ObservableProperty]
-    private Brush _lblColor = new SolidColorBrush(Colors.Black);
-
-    [ObservableProperty]
-    private int _paneLength = 5;
-
-
-    [RelayCommand]
-    private void TriggerPane()
-    {
-        IsPaneOpen = !IsPaneOpen;
-    }
-
-    [RelayCommand]
-    private void LogOut()
-    {
-        WeakReferenceMessenger.Default.Send(new LogOutMessage());
+        public Type ModelType { get; }
+        public StreamGeometry ListItemIcon { get; }
     }
 }
-
-/// <summary>
-/// The list item template.
-/// </summary>
-public class ListItemTemplate
-{
-    public ListItemTemplate(Type type, string iconKey)
-    {
-        ModelType = type;
-        Label = type.Name.Replace("PageViewModel", "");
-
-        Application.Current!.TryFindResource(iconKey, out var res);
-        ListItemIcon = (StreamGeometry)res!;
-    }
-    public string Label { get; }
-
-    public Type ModelType { get; }
-    public StreamGeometry ListItemIcon { get; }
-}
-
-
