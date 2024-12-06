@@ -85,9 +85,7 @@
 				</ItemsControl.ItemsPanel>
 			</ItemsControl>
 		</ScrollViewer>
-
-
-	</Grid>
+		</Grid>
 	</Border>
 	
 </UserControl>

@@ -4,9 +4,9 @@ using Avalonia.Markup.Xaml;
 
 namespace Mamilots_POS;
 
-public partial class MainContentView : UserControl
+public partial class ProductsContentView : UserControl
 {
-    public MainContentView()
+    public ProductsContentView()
     {
         InitializeComponent();
     }
