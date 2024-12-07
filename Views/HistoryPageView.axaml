@@ -2,7 +2,87 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="Mamilots_POS.Views.HistoryPageView">
-	<TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">adawa</TextBlock>
+             xmlns:vm="clr-namespace:Mamilots_POS.ViewModels"
+             xmlns:converters="clr-namespace:Mamilots_POS.Converters"
+             mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1024"
+             x:Class="Mamilots_POS.Views.HistoryPageView"
+             x:DataType="vm:HistoryPageViewModel">
+	<UserControl.DataContext>
+		<vm:HistoryPageViewModel/>
+	</UserControl.DataContext>
+
+	<UserControl.Resources>
+		<converters:CountToRowsConverter x:Key="CountToRowsConverter"/>
+		<converters:DoubleToCurrencyConverter x:Key="DoubleToCurrencyConverter"/>
+		<LinearGradientBrush x:Key="MyGradientBrush" StartPoint="0%,0%" EndPoint="0%,100%">
+			<GradientStop Offset="0" Color="#F8F8F7"/>
+			<GradientStop Offset="0.5" Color="#FFFFE4"/>
+			<GradientStop Offset="1" Color="#F8F8F7"/>
+		</LinearGradientBrush>
+	</UserControl.Resources>
+
+	<Border Background="LightGray" CornerRadius="10">
+		<Grid>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*"/>
+				<ColumnDefinition Width="0.5*"/>
+			</Grid.ColumnDefinitions>
+			<Border Grid.Row="0" Background="{StaticResource MyGradientBrush}">
+				<StackPanel>
+					<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="40" Margin="0, 16, 0, 0">
+						<TextBox Width="250"
+                                 Margin="50 20 50 20"
+                                 Background="White"
+                                 CornerRadius="8"
+                                 FontWeight="Light"
+                                 FontSize="11"
+                                 Watermark="Search for order...">
+						</TextBox>
+					</StackPanel>
+					<StackPanel Orientation="Horizontal">
+						<TextBlock Margin="60, 25, 10, 33"
+                                   HorizontalAlignment="Left"
+                                   VerticalAlignment="Top"
+                                   FontSize="40"
+                                   FontFamily="Montserrat"
+                                   FontWeight="Bold" Text="History"/>
+					</StackPanel>
+
+					<ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0, 20, 0, 0">
+						<ItemsControl FontFamily="Montserrat" ItemsSource="{Binding transactions}" HorizontalAlignment="Center">
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<Border BoxShadow="0 0 70 -25 DarkGray" Margin="0, 10">
+										<!-- Reduced the margin here -->
+										<Button CornerRadius="20" Cursor="Hand" MinWidth="350" Height="70">
+											<DockPanel>
+												<TextBlock DockPanel.Dock="Left" FontSize="24" FontWeight="Bold" Margin="0 0 50 0">
+													<TextBlock.Text>
+														<MultiBinding StringFormat="Order {0}">
+															<Binding Path="OrderNumber" />
+														</MultiBinding>
+													</TextBlock.Text>
+												</TextBlock>
+												<TextBlock DockPanel.Dock="Right" FontSize="24" FontWeight="Bold" Foreground="DarkGray" Margin="20 0 0 0">
+													<TextBlock.Text>
+														<Binding Path="TotalPrice" Converter="{StaticResource DoubleToCurrencyConverter}"/>
+													</TextBlock.Text>
+												</TextBlock>
+											</DockPanel>
+										</Button>
+									</Border>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+
+							<ItemsControl.ItemsPanel>
+								<ItemsPanelTemplate>
+									<StackPanel Orientation="Vertical"/>
+								</ItemsPanelTemplate>
+							</ItemsControl.ItemsPanel>
+						</ItemsControl>
+					</ScrollViewer>
+				</StackPanel>
+			</Border>
+		</Grid>
+	</Border>
 </UserControl>
