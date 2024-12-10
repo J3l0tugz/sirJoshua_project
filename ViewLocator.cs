@@ -49,7 +49,7 @@ namespace Mamilots_POS
 
         public ViewLocator() {
             RegisterViewFactory<MainWindowViewModel, MainWindow>();
-            RegisterViewFactory<HomePageViewModel, HomePageView>();
+            RegisterViewFactory<ProductsEditPageViewModel, ProductsEditPageView>();
             RegisterViewFactory<ProductsPageViewModel, ProductsPageView>();
             RegisterViewFactory<HistoryPageViewModel, HistoryPageView>();
             RegisterViewFactory<FluentSplashScreenViewModel, FluentSplashScreenView>();

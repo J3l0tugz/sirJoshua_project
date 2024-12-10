@@ -90,7 +90,7 @@ namespace Mamilots_POS
         private void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<MainWindowViewModel>();
-            services.AddTransient<HomePageViewModel>();
+            services.AddTransient<ProductsContentViewModel>();
             services.AddTransient<ProductsPageViewModel>();
             services.AddTransient<HistoryPageViewModel>();
             services.AddSingleton<FluentSplashScreenViewModel>();
@@ -98,7 +98,7 @@ namespace Mamilots_POS
             services.AddSingleton<SecretViewModel>();
 
             services.AddSingleton<MainWindow>();
-            services.AddTransient<HomePageView>();
+            services.AddTransient<ProductsEditPageView>();
             services.AddTransient<ProductsPageView>();
             services.AddTransient<HistoryPageView>();
             services.AddTransient<FluentSplashScreenView>();
