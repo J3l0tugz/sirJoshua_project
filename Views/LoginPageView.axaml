@@ -17,7 +17,7 @@
 			<Border Grid.Column="0" Background="LightGray" CornerRadius="8 0 0 8">
 				<!-- Content for the first half -->
 				<Panel HorizontalAlignment="Center">
-					<Image Source="C:\Users\Jelo\source\repos\Mamilots POS\Assets\Images\loginFigure.png"/>
+					<Image Source="\Assets\Images\loginFigure.png"/>
 				</Panel>
 			</Border>
 			<Border Grid.Column="1" Background="White" CornerRadius="90 0 0 90">

@@ -12,7 +12,7 @@
 		MinWidth="799">
 
 	<Window.Resources>
-		<FontFamily x:Key="Montserrat">C:\Users\Jelo\source\repos\Mamilots POS\Assets\Fonts\Montserrat\Montserrat.ttf#Montserrat</FontFamily>
+		<FontFamily x:Key="Montserrat">\Assets\Fonts\Montserrat\Montserrat.ttf#Montserrat</FontFamily>
 		<LinearGradientBrush x:Key="MyGradientBrush" StartPoint="0%,0%" EndPoint="0%,100%">
 			<GradientStop Offset="0.6" Color="#FFCA40"/>
 			<GradientStop Offset="1" Color="#FFC340"/>
@@ -40,7 +40,7 @@
 					<ColumnDefinition Width="Auto"/>
 					<ColumnDefinition Width="*"/>
 				</Grid.ColumnDefinitions>
-				<Image Source="C:/Users/Jelo/source/repos/Mamilots POS/Assets/Images/mamilotsIcon.png"
+				<Image Source="/Assets/Images/mamilotsIcon.png"
                        Width="25" Height="25" Margin="0,0,5,0" Grid.Column="0"/>
 				<TextBlock Text="{Binding Title, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
                            VerticalAlignment="Center" Grid.Column="1"/>

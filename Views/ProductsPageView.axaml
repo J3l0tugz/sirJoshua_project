@@ -55,7 +55,7 @@
                                FontSize="40"
                                FontFamily="Montserrat"
                                FontWeight="Bold" Text="Categories"/>
-					<Image Source="C:\Users\Jelo\source\repos\Mamilots POS\Assets\Images\taroIcon.png"
+					<Image Source="\Assets\Images\taroIcon.png"
                            Width="55" Margin="0, -10, 0, 0"/>
 				</StackPanel>
 			</StackPanel>
