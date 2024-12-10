@@ -13,7 +13,7 @@ namespace project_open
         private static string SERVER = "(local)\\sqlexpress";
 
 
-        protected static SqlConnection SqlConn()
+        protected SqlConnection SqlConn()
         {
             return new SqlConnection($"SERVER={SERVER};DATABASE={DATABASE};Integrated Security=True;TrustServerCertificate=True");
         }
