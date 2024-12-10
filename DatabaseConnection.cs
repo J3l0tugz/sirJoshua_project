@@ -9,7 +9,7 @@ namespace project_open
 {
     public class DatabaseConnection
     {
-        private static string DATABASE = "open_project_db";
+        private static string DATABASE = "mamilots_db";
         private static string SERVER = "(local)\\sqlexpress";
 
 

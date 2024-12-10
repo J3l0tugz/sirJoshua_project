@@ -42,9 +42,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Views\HomePageView.axaml.cs">
-      <DependentUpon>HomePageView.axaml</DependentUpon>
-    </Compile>
     <Compile Update="Views\LoginPageView.axaml.cs">
       <DependentUpon>LoginPageView.axaml</DependentUpon>
     </Compile>

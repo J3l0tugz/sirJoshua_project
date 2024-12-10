@@ -1,12 +1,10 @@
-using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 
 namespace Mamilots_POS.Views
 {
-    public partial class HomePageView : UserControl
+    public partial class ProductsEditPageView : UserControl
     {
-        public HomePageView()
+        public ProductsEditPageView()
         {
             InitializeComponent();
         }
