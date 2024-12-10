@@ -5,7 +5,7 @@
              mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="400"
              x:Class="Mamilots_POS.Views.FluentSplashScreenView">
 	<UserControl.Resources>
-		<FontFamily x:Key="Montserrat">C:\Users\Jelo\source\repos\Mamilots POS\Assets\Fonts\Montserrat\Montserrat.ttf#Montserrat</FontFamily>
+		<FontFamily x:Key="Montserrat">\Assets\Fonts\Montserrat\Montserrat.ttf#Montserrat</FontFamily>
 		<LinearGradientBrush x:Key="MyGradientBrush" StartPoint="0%,0%" EndPoint="0%,100%">
 			<GradientStop Offset="0.6" Color="#FFCA40"/>
 			<GradientStop Offset="1" Color="#FFC340"/>
@@ -15,7 +15,7 @@
 	<Panel Background="{StaticResource MyGradientBrush}">
 		<StackPanel Spacing="10"
 					VerticalAlignment="Center">
-			<Image Source="C:\Users\Jelo\source\repos\Mamilots POS\Assets\Images\mamilots.png"
+			<Image Source="\Assets\Images\mamilots.png"
 				   MaxWidth="400"
 				   Margin="0, 30" />
 
