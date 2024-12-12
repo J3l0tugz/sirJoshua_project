@@ -12,7 +12,7 @@ namespace Mamilots_POS.ViewModels
 {
     partial class ProductsEditPageViewModel : ViewModelBase
     {
-        private ObservableCollection<Product> _products = new ObservableCollection<Product>();
+        private ObservableCollection<Product> _products;
         public ObservableCollection<Product> Products
         {
             get => _products;
@@ -47,6 +47,7 @@ namespace Mamilots_POS.ViewModels
 
         private async void LoadProducts()
         {
+            _products = new ObservableCollection<Product>();
             int i = 0;
             Debug.WriteLine(_productRepository.GetProductsAsync().ToString());
             await foreach (var product in _productRepository.GetProductsAsync())
@@ -67,8 +68,6 @@ namespace Mamilots_POS.ViewModels
                         Price = product.Price
                     });
                 }
-
-
             }
         }
 
