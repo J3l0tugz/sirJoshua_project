@@ -13,6 +13,6 @@
     <Application.Styles>
 		<sty:FluentAvaloniaTheme PreferUserAccentColor="True"/>
 		<StyleInclude Source="avares://Mamilots_POS/Assets/Icons.axaml"></StyleInclude>
-		
+		<StyleInclude Source="avares://Mamilots_POS/Styles/Animations.axaml"/>
     </Application.Styles>
 </Application>
