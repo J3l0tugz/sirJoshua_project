@@ -13,7 +13,6 @@
 	</UserControl.DataContext>
 
 	<UserControl.Resources>
-		<converters:CountToRowsConverter x:Key="CountToRowsConverter"/>
 		<LinearGradientBrush x:Key="MyGradientBrush" StartPoint="0%,0%" EndPoint="0%,100%">
 			<GradientStop Offset="0" Color="#F8F8F7"/>
 			<GradientStop Offset="0.5" Color="#FFFFE4"/>

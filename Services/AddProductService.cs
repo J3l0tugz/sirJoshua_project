@@ -34,4 +34,5 @@ namespace Mamilots_POS.Services
                 }
             }
         }
+    }
 }

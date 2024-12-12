@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using Mamilots_POS.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
+using System.Data.SqlTypes;
 
 namespace Mamilots_POS.ViewModels
 {
@@ -13,9 +14,9 @@ namespace Mamilots_POS.ViewModels
         {
             Products = new ObservableCollection<Product>
             {
-                new Product { Id = 1, Name = "Original Taro Chips", IsBestSeller = 0, CategoryId = 0, Price = 120.00f },
-                new Product { Id = 2, Name = "Sweet Banana Chips", IsBestSeller = 1, CategoryId = 1, Price = 120.00f },
-                new Product { Id = 3, Name = "Sweet Camote Chips", IsBestSeller = 1, CategoryId = 2, Price = 109.99f }
+                new Product { Id = 1, Name = "Original Taro Chips", IsBestSeller = false, CategoryId = 0, Price = new SqlMoney(120.5) },
+                new Product { Id = 2, Name = "Sweet Banana Chips", IsBestSeller = true, CategoryId = 1, Price = new SqlMoney(120.5) },
+                new Product { Id = 3, Name = "Sweet Camote Chips", IsBestSeller = true, CategoryId = 2, Price = new SqlMoney(120.5) }
             };
         }
 
@@ -44,8 +45,6 @@ namespace Mamilots_POS.ViewModels
         {
             IsAddModalVisible = false;
         }
-
-
 
 
         [ObservableProperty]
