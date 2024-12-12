@@ -156,16 +156,18 @@
 
 				<StackPanel Grid.Column="1">
 					<TextBlock Text="Add Product" FontWeight="Bold" FontSize="24" Margin="0,105,0,20"/>
-					<TextBox Watermark="Product Name" Margin="0,0,0,15"/>
-					<ComboBox PlaceholderText="Category" Margin="0,0,0,15" HorizontalAlignment="Stretch">
+					<TextBox Watermark="Product Name" Text="{Binding ProductName}" Margin="0,0,0,15"/>
+					<ComboBox SelectedIndex="{Binding ProductCategory}" PlaceholderText="Category" Margin="0,0,0,15" HorizontalAlignment="Stretch">
 						<ComboBoxItem Content="Taro Chips"/>
 						<ComboBoxItem Content="Banana Chips"/>
 						<ComboBoxItem Content="Camote Chips"/>
 						<ComboBoxItem Content="Other Products"/>
 					</ComboBox>
-					<TextBox Watermark="Price" Margin="0,0,0,15"/>
-					<CheckBox Content="Best Seller" Margin="0,0,0,15"/>
-					<Button Name="BtnSave" Content="Save" Margin="0,20,0,0" Width="180" FontFamily="Montserrat"
+					<TextBox Watermark="Price" Text="{Binding ProductPrice}" Margin="0,0,0,15"/>
+					<CheckBox IsChecked="{Binding IsBestSeller}" Content="Best Seller" Margin="0,0,0,15"/>
+					<TextBlock Text="{Binding ErrorMessage}"
+								   HorizontalAlignment="Center" Foreground="IndianRed" FontSize="14"/>
+					<Button Command="{Binding AddCommand}" Name="BtnSave" Content="Save" Margin="0,20,0,0" Width="180" FontFamily="Montserrat"
 							Background="LimeGreen" HorizontalAlignment="Center"/>
 				</StackPanel>
 			</Grid>

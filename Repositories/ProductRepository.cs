@@ -25,27 +25,22 @@ namespace Mamilots_POS.Repositories
             using (var conn = SqlConn())
             {
                 conn.Open();
-                string query = "select * from products join categories As c on c.id = products.categories_id where is_deleted=0;";
+                string query = "select p.name,p.is_best_seller,p.categories_id,p.price from products AS p join categories As c on c.id = p.categories_id where p.is_deleted=0;";
                 using (var cmd = new SqlCommand(query, conn))
                 {
                     using (var reader = await cmd.ExecuteReaderAsync(System.Data.CommandBehavior.CloseConnection))
                     {
                         while (await reader.ReadAsync())
                         {
-                            yield return new Product
+                            yield return new Product()
                             {
-                                Id = reader.GetInt32(0),
-                                Name = reader.GetString(1),
-                                Image = reader.GetString(2),
-                                IsBestSeller = (bool)reader.GetBoolean(3),
+                                Name = reader.GetString(0),
+                                IsBestSeller = (bool)reader.GetBoolean(1),
                                 Category = new Category()
                                 {
-                                    Id = reader.GetInt32(4),
-                                    Name = reader.GetString(11),
+                                    Id = reader.GetInt32(2),
                                 },
-                                Price = reader.GetInt32(5),
-                                CreatedAt = reader.GetDateTime(6),
-                                UpdatedAt = reader.IsDBNull(7) ? null : reader.GetDateTime(7),
+                                Price = reader.GetSqlMoney(3),
                             };
                         }
                     }
@@ -75,7 +70,7 @@ namespace Mamilots_POS.Repositories
                                 Id = reader.GetInt32(4),
                                 Name = reader.GetString(11),
                             },
-                            Price = reader.GetInt32(5),
+                            Price = reader.GetSqlMoney(5),
                             CreatedAt = reader.GetDateTime(6),
                         };
                     }

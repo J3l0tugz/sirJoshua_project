@@ -2,25 +2,105 @@
 using System.Collections.ObjectModel;
 using Mamilots_POS.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
+using System.Data.SqlTypes;
+using System.Diagnostics;
+using System;
+using Mamilots_POS.Repositories;
+using Mamilots_POS.Services;
 
 namespace Mamilots_POS.ViewModels
 {
     partial class ProductsEditPageViewModel : ViewModelBase
     {
-        public ObservableCollection<Product> Products { get; set; }
+        private ObservableCollection<Product> _products = new ObservableCollection<Product>();
+        public ObservableCollection<Product> Products
+        {
+            get => _products;
+            set => SetProperty(ref _products, value);
+        }
+
+        [ObservableProperty]
+        private string? _productName;
+
+        [ObservableProperty]
+        private string? _productPrice;
+
+        [ObservableProperty]
+        private int _productCategory;
+
+        [ObservableProperty]
+        private bool _isBestSeller;
+
+        [ObservableProperty]
+        private string? _errorMessage;
+
+        private readonly IAddProductService _addProductService;
+        private readonly IProductRepository _productRepository;
 
         public ProductsEditPageViewModel()
         {
-            Products = new ObservableCollection<Product>
+            _addProductService = new AddProductService();
+            _productRepository = new ProductRepository();
+            LoadProducts();
+
+        }
+
+        private async void LoadProducts()
+        {
+            int i = 0;
+            Debug.WriteLine(_productRepository.GetProductsAsync().ToString());
+            await foreach (var product in _productRepository.GetProductsAsync())
             {
-                new Product { Id = 1, Name = "Original Taro Chips", IsBestSeller = 0, CategoryId = 0, Price = 120.00f },
-                new Product { Id = 2, Name = "Sweet Banana Chips", IsBestSeller = 1, CategoryId = 1, Price = 120.00f },
-                new Product { Id = 3, Name = "Sweet Camote Chips", IsBestSeller = 1, CategoryId = 2, Price = 109.99f }
-            };
+                Debug.WriteLine(product.Name);
+                Debug.WriteLine(product.IsBestSeller);
+                Debug.WriteLine(product.Category.Id);
+                Debug.WriteLine(product.Price);
+                Debug.WriteLine("INDEX: " + i++);
+                Debug.WriteLine("-----------------");
+                if (product != null)
+                {
+                    Products.Add(new Product
+                    {
+                        Name = product.Name,
+                        IsBestSeller = product.IsBestSeller,
+                        CategoryId = product.Category.Id,
+                        Price = product.Price
+                    });
+                }
+
+
+            }
         }
 
         [RelayCommand]
-        public void Add() { /* Add logic here */ }
+        public void Add() 
+        {
+            try
+            {
+                if(ProductName != null || ProductPrice != null|| ProductCategory != null)
+                {
+                    _addProductService.AddProduct(
+                        ProductName,
+                        IsBestSeller,
+                        ProductCategory,
+                        (SqlMoney) float.Parse(ProductPrice)
+                        );
+                    LoadProducts();
+                }else
+                {
+                    ErrorMessage = "Insert error message";
+                }
+
+            }
+            catch (FormatException e)
+            {
+                ErrorMessage = "Price may not contain letters";
+            }
+            catch(ArgumentNullException e)
+            {
+                ErrorMessage = "Price can't be null";
+            }
+        }
 
         [RelayCommand]
         public void Edit() { /* Edit logic here */ }
