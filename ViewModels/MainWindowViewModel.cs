@@ -16,12 +16,14 @@ namespace Mamilots_POS.ViewModels
     public partial class MainWindowViewModel : ViewModelBase
     {
         private ListItemTemplate _historyItem;
+        private ListItemTemplate _productsEditItem;
 
         public MainWindowViewModel() : this(MessengerInstance.Instance) { }
 
         public MainWindowViewModel(IMessenger messenger)
         {
             _historyItem = new ListItemTemplate(typeof(HistoryPageViewModel), "historyregular");
+            _productsEditItem = new ListItemTemplate(typeof(ProductsEditPageViewModel), "tableeditregular");
 
             messenger.Register<MainWindowViewModel, LoginSuccessMessage>(this, (recipient, message) =>
             {
@@ -38,6 +40,7 @@ namespace Mamilots_POS.ViewModels
                 SelectedListItem = Items.FirstOrDefault(item => item.ModelType == typeof(ProductsPageViewModel));
 
                 // Add HistoryPageViewModel to the list
+                Items.Add(_productsEditItem);
                 Items.Add(_historyItem);
             });
 
@@ -51,6 +54,7 @@ namespace Mamilots_POS.ViewModels
 
                 // Remove HistoryPageViewModel from the list
                 Items.Remove(_historyItem);
+                Items.Remove(_productsEditItem);
             });
 
             messenger.Register<MainWindowViewModel, GuestModeMessage>(this, (recipient, message) =>
@@ -126,7 +130,7 @@ namespace Mamilots_POS.ViewModels
         public ListItemTemplate(Type type, string iconKey)
         {
             ModelType = type;
-            Label = type.Name.Replace("PageViewModel", "");
+            Label = type.Name.Replace("PageViewModel", "").Replace("ProductsEdit", "Product Manager");
 
             Application.Current!.TryFindResource(iconKey, out var res);
             ListItemIcon = (StreamGeometry)res!;

@@ -63,7 +63,6 @@ namespace Mamilots_POS.ViewModels
 
     public class Category 
     {
-        
         public string? Name { get; set; }
         public Bitmap? ImagePath { get; set; }
     }
