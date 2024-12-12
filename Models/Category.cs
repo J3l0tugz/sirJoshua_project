@@ -6,10 +6,7 @@ using System.Threading.Tasks;
 
 namespace Mamilots_POS.Models
 {
-    public class Transaction
+    internal class Category
     {
-        public int Id { get; set; }
-        public int ProductId { get; set; }
-        public int Quantity { get; set; }
     }
 }
