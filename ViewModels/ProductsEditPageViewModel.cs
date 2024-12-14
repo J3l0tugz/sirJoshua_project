@@ -161,8 +161,6 @@ namespace Mamilots_POS.ViewModels
         }
 
 
-
-
         [ObservableProperty]
         private bool isEditModalVisible;
 
