@@ -99,6 +99,7 @@ namespace Mamilots_POS.ViewModels
                         Id = _productRepository.GetHighestId()
 
                     });
+                    HideAddModal();
                 }else
                 {
                     ErrorMessage = "Insert error message";
@@ -129,7 +130,18 @@ namespace Mamilots_POS.ViewModels
         }
 
         [RelayCommand]
-        public void Delete() { /* Delete logic here */ }
+        public void Delete(int Id) 
+        {
+            Debug.WriteLine(Id);
+            _deleteProductService.DeleteProduct(Id);
+            Product temp = Products.First(x => x.Id == Id);
+            if (temp != null)
+            {
+                Debug.WriteLine(temp.Id);
+                Products.Remove(temp);
+            }
+            HideDeleteModal();
+        }
 
 
 
@@ -174,8 +186,9 @@ namespace Mamilots_POS.ViewModels
         private bool isDeleteModalVisible;
 
         [RelayCommand]
-        public void ShowDeleteModal()
+        public void ShowDeleteModal(int Id)
         {
+            CurrProduct = _productRepository.GetProduct(Id);
             IsDeleteModalVisible = true;
         }
 

@@ -20,7 +20,7 @@ namespace Mamilots_POS.Services
             using (var conn = SqlConn())
             {
                 conn.Open();
-                string query = "update product set is_deleted=1 where id=@id";
+                string query = "update products set is_deleted=1 where id=@id";
                 using(var cmd = new SqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("id", id);
