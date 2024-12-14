@@ -111,7 +111,6 @@
 					<DataGridTextColumn Header="Product Name" Binding="{Binding Name}" Width="*"/>
 					<DataGridTextColumn Header="Category" Binding="{Binding CategoryId, Converter={StaticResource CategoryIdToNameConverter}}" Width="*"/>
 					<DataGridCheckBoxColumn Header="Best Seller" Binding="{Binding IsBestSeller}" Width="*"/>
-					<DataGridCheckBoxColumn Header="Best Seller?" Binding="{Binding IsBestSeller}" Width="*"/>
 					<DataGridTemplateColumn Header="Price" Width="*">
 						<DataGridTemplateColumn.CellTemplate>
 							<DataTemplate>
