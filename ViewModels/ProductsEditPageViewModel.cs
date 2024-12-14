@@ -84,7 +84,14 @@ namespace Mamilots_POS.ViewModels
                         ProductCategory,
                         (SqlMoney) float.Parse(ProductPrice)
                         );
-                    LoadProducts();
+                    Products.Add(new Product
+                    {
+                        Name = _productName,
+                        IsBestSeller = _isBestSeller,
+                        CategoryId = _productCategory,
+                        Price = (SqlMoney) float.Parse(_productPrice)
+
+                    });
                 }else
                 {
                     ErrorMessage = "Insert error message";
