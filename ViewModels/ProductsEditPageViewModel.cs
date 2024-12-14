@@ -7,6 +7,9 @@ using System.Diagnostics;
 using System;
 using Mamilots_POS.Repositories;
 using Mamilots_POS.Services;
+using DynamicData;
+using System.Linq;
+using FluentAvalonia.Core;
 
 namespace Mamilots_POS.ViewModels
 {
@@ -18,6 +21,12 @@ namespace Mamilots_POS.ViewModels
             get => _products;
             set => SetProperty(ref _products, value);
         }
+
+        [ObservableProperty]
+        private Product _currProduct;
+
+        [ObservableProperty]
+        private string? _currProductPrice;
 
         [ObservableProperty]
         private string? _productName;
@@ -35,12 +44,16 @@ namespace Mamilots_POS.ViewModels
         private string? _errorMessage;
 
         private readonly IAddProductService _addProductService;
+        private readonly IDeleteProductService _deleteProductService;
+        private readonly IEditProductService _editProductService;
         private readonly IProductRepository _productRepository;
 
         public ProductsEditPageViewModel()
         {
             _addProductService = new AddProductService();
             _productRepository = new ProductRepository();
+            _deleteProductService = new DeleteProductService();
+            _editProductService = new EditProductService();
             LoadProducts();
 
         }
@@ -48,24 +61,17 @@ namespace Mamilots_POS.ViewModels
         private async void LoadProducts()
         {
             _products = new ObservableCollection<Product>();
-            int i = 0;
-            Debug.WriteLine(_productRepository.GetProductsAsync().ToString());
             await foreach (var product in _productRepository.GetProductsAsync())
             {
-                Debug.WriteLine(product.Name);
-                Debug.WriteLine(product.IsBestSeller);
-                Debug.WriteLine(product.Category.Id);
-                Debug.WriteLine(product.Price);
-                Debug.WriteLine("INDEX: " + i++);
-                Debug.WriteLine("-----------------");
                 if (product != null)
                 {
                     Products.Add(new Product
                     {
                         Name = product.Name,
                         IsBestSeller = product.IsBestSeller,
-                        CategoryId = product.Category.Id,
-                        Price = product.Price
+                        CategoryId = product.CategoryId,
+                        Price = product.Price,
+                        Id = product.Id
                     });
                 }
             }
@@ -89,7 +95,8 @@ namespace Mamilots_POS.ViewModels
                         Name = _productName,
                         IsBestSeller = _isBestSeller,
                         CategoryId = _productCategory,
-                        Price = (SqlMoney) float.Parse(_productPrice)
+                        Price = (SqlMoney)float.Parse(_productPrice),
+                        Id = _productRepository.GetHighestId()
 
                     });
                 }else
@@ -109,7 +116,17 @@ namespace Mamilots_POS.ViewModels
         }
 
         [RelayCommand]
-        public void Edit() { /* Edit logic here */ }
+        public void Edit(Product product)
+        {
+            _editProductService.UpdateProduct(product.Id, product.Name, product.IsBestSeller, product.CategoryId, SqlMoney.Parse(CurrProductPrice));
+            Product temp = Products.First(x => x.Id == CurrProduct.Id);
+            if (temp != null)
+            {
+                product.Price = SqlMoney.Parse(CurrProductPrice);
+                Products.Replace(temp, product);
+            }
+            HideEditModal();
+        }
 
         [RelayCommand]
         public void Delete() { /* Delete logic here */ }
@@ -138,8 +155,10 @@ namespace Mamilots_POS.ViewModels
         private bool isEditModalVisible;
 
         [RelayCommand]
-        public void ShowEditModal()
+        public void ShowEditModal(int Id)
         {
+            CurrProduct = _productRepository.GetProduct(Id);
+            CurrProductPrice = CurrProduct.Price + "";
             IsEditModalVisible = true;
         }
 

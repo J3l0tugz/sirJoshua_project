@@ -15,7 +15,6 @@ namespace Mamilots_POS.Models
         public string? Image {  get; set; }
         public bool IsBestSeller { get; set; }
         public int CategoryId { get; set; }
-        public Category Category { get; set; }
         public SqlMoney Price { get; set; }
         public SqlDateTime? CreatedAt { get; set; }
         public SqlDateTime? UpdatedAt { get; set; }

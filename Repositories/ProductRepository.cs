@@ -1,9 +1,11 @@
-﻿using Mamilots_POS.Models;
+﻿using HarfBuzzSharp;
+using Mamilots_POS.Models;
 using Microsoft.Data.SqlClient;
 using project_open;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlTypes;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -15,6 +17,8 @@ namespace Mamilots_POS.Repositories
     {
         IAsyncEnumerable<Product> GetProductsAsync();
         IAsyncEnumerable<TransactionProduct> GetTransactionProductsAsync(int TransactionId);
+        int GetHighestId();
+        Product GetProduct(int Id);
 
     }
 
@@ -25,7 +29,7 @@ namespace Mamilots_POS.Repositories
             using (var conn = SqlConn())
             {
                 conn.Open();
-                string query = "select p.name,p.is_best_seller,p.categories_id,p.price from products AS p join categories As c on c.id = p.categories_id where p.is_deleted=0;";
+                string query = "select p.name,p.is_best_seller,p.categories_id,p.price, p.id from products AS p where p.is_deleted=0;";
                 using (var cmd = new SqlCommand(query, conn))
                 {
                     using (var reader = await cmd.ExecuteReaderAsync(System.Data.CommandBehavior.CloseConnection))
@@ -36,15 +40,35 @@ namespace Mamilots_POS.Repositories
                             {
                                 Name = reader.GetString(0),
                                 IsBestSeller = (bool)reader.GetBoolean(1),
-                                Category = new Category()
-                                {
-                                    Id = reader.GetInt32(2),
-                                },
+                                CategoryId = reader.GetInt32(2),
                                 Price = reader.GetSqlMoney(3),
+                                Id = reader.GetInt32(4),
                             };
                         }
                     }
                 }
+            }
+        }
+
+
+        public int GetHighestId()
+        {
+            using (var conn = SqlConn())
+            {
+                conn.Open();
+                string query = "select max(id) as Id from products;";
+                using (var cmd = new SqlCommand(query,conn))
+                {
+                    using (var reader = cmd.ExecuteReader(System.Data.CommandBehavior.CloseConnection))
+                    {
+                        if(reader.Read())
+                        {
+                            return reader.GetInt32(0);
+                        }
+                        return -1;
+                    }
+                }
+
             }
         }
 
@@ -53,26 +77,24 @@ namespace Mamilots_POS.Repositories
             using (var conn = SqlConn())
             {
                 conn.Open();
-                string query = "Select * from products join where id = @Id and is_delete=0";
+                string query = "select p.name,p.is_best_seller,p.categories_id,p.price, p.id from products AS p where p.id = @id;";
                 using (var cmd = new SqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("id", Id);
                     using (var reader = cmd.ExecuteReader(System.Data.CommandBehavior.CloseConnection))
                     {
-                        return new Product
+                        if(reader.Read())
                         {
-                            Id = reader.GetInt32(0),
-                            Name = reader.GetString(1),
-                            Image = reader.GetString(2),
-                            IsBestSeller = (bool)reader.GetBoolean(3),
-                            Category = new Category
+                            return new Product()
                             {
+                                Name = reader.GetString(0),
+                                IsBestSeller = (bool)reader.GetBoolean(1),
+                                CategoryId = reader.GetInt32(2),
+                                Price = reader.GetSqlMoney(3),
                                 Id = reader.GetInt32(4),
-                                Name = reader.GetString(11),
-                            },
-                            Price = reader.GetSqlMoney(5),
-                            CreatedAt = reader.GetDateTime(6),
-                        };
+                            };
+                        }
+                        return null;
                     }
                 }
             }
