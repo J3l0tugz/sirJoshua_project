@@ -11,12 +11,12 @@ namespace Mamilots_POS.Services
 {
     public interface IAddProductService
     {
-        bool AddProduct(string name, string image, bool isBestSeller, int categoryId, SqlMoney price);
+        bool AddProduct(string name, bool isBestSeller, int categoryId, SqlMoney price);
     }
 
     public class AddProductService : DatabaseConnection, IAddProductService
     {
-        public bool AddProduct(string name, string image, bool isBestSeller, int categoryId, SqlMoney price)
+        public bool AddProduct(string name, bool isBestSeller, int categoryId, SqlMoney price)
         {
             using (var conn = SqlConn())
             {

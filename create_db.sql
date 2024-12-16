@@ -1,9 +1,10 @@
 EXEC sp_MSforeachtable @command1 = "DROP TABLE ?"
 drop database mamilots_db;
 create database mamilots_db;
+use mamilots_db;
 
 create table categories(
-	id int primary key identity(1,1),
+	id int primary key identity(0,1),
 	name varchar(20) not null
 );
 
