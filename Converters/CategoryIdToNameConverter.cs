@@ -15,6 +15,7 @@ namespace Mamilots_POS.Converters
                     0 => "Taro Chips",
                     1 => "Banana Chips",
                     2 => "Camote Chips",
+                    3 => "Other Products",
                     _ => "Unknown"
                 };
             }

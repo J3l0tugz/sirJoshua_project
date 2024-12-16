@@ -12,17 +12,17 @@ namespace Mamilots_POS.Services
 {
     public interface IEditProductService
     {
-        bool UpdateProduct(int id, string name, string image, bool isBestSeller, int categoryId, SqlMoney price);
+        bool UpdateProduct(int id, string name, bool isBestSeller, int categoryId, SqlMoney price);
     }
 
     public class EditProductService : DatabaseConnection, IEditProductService
     {
-        public bool UpdateProduct(int id, string name, string image, bool isBestSeller, int categoryId, SqlMoney price)
+        public bool UpdateProduct(int id, string name, bool isBestSeller, int categoryId, SqlMoney price)
         {
             using(var conn = SqlConn())
             {
                 conn.Open();
-                string query = "update products set name=@name, is_best_seller=@isBestSeller, categories_id=categoryId, price=@price, updated_at=current_timestamp where id=@id;";
+                string query = "update products set name=@name, is_best_seller=@isBestSeller, categories_id=@categoryId, price=@price, updated_at=current_timestamp where id=@id;";
                 using(var cmd = new SqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("id", id);
