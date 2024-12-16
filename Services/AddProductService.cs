@@ -29,6 +29,7 @@ namespace Mamilots_POS.Services
                     cmd.Parameters.AddWithValue("isBestSeller", isBestSeller);
                     cmd.Parameters.AddWithValue("categoryId", categoryId);
                     cmd.Parameters.AddWithValue("price", price);
+                    
 
                     return cmd.ExecuteNonQuery() == 1;
                 }

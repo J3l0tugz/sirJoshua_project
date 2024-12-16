@@ -21,6 +21,12 @@
 		</LinearGradientBrush>
 	</UserControl.Resources>
 
+	<UserControl.Styles>
+		<Style Selector="Button:pressed">
+			<Setter Property="Background" Value="Red"/>
+		</Style>
+	</UserControl.Styles>
+
 	<Border Background="{StaticResource MyGradientBrush}" CornerRadius="10">
 		<Grid>
 			<Grid.ColumnDefinitions>
@@ -85,7 +91,31 @@
 			</Border>
 
 			<Border Grid.Column="1" Background="LightGray" CornerRadius="90 8 8 90">
-				
+				<StackPanel Margin="80 115 80 80" Spacing="30">
+					<TextBlock Text="Order #1" FontFamily="Montserrat"
+							   FontWeight="Bold" FontSize="40"/>
+
+					<ScrollViewer VerticalScrollBarVisibility="Auto" >
+						<ItemsControl FontFamily="Montserrat" ItemsSource="{Binding transactions}">
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<Border Margin="0, 40" Background="AntiqueWhite">
+										<Grid>
+											<Image Grid.Column="0" Source="/Assets/Images/taroChips.png" Width="150" HorizontalAlignment="Left"/>
+											<TextBlock Grid.Column="1" Text="Item Name" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+										</Grid>
+									</Border>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+
+							<ItemsControl.ItemsPanel>
+								<ItemsPanelTemplate>
+									<StackPanel Orientation="Vertical"/>
+								</ItemsPanelTemplate>
+							</ItemsControl.ItemsPanel>
+						</ItemsControl>
+					</ScrollViewer>
+				</StackPanel>
 			</Border>
 		</Grid>
 	</Border>

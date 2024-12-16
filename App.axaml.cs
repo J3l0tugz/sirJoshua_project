@@ -99,6 +99,16 @@ namespace Mamilots_POS
             services.AddSingleton<SecretViewModel>();
             services.AddSingleton<INavigationService, NavigationService>();
 
+            services.AddSingleton<AddProductService>();
+            services.AddSingleton<DeleteProductService>();
+            services.AddSingleton<EditProductService>();
+            services.AddSingleton<LoginService>();
+
+            services.AddSingleton<AddProductService>();
+            services.AddSingleton<DeleteProductService>();
+            services.AddSingleton<EditProductService>();
+            services.AddSingleton<LoginService>();
+
             services.AddSingleton<MainWindow>();
             services.AddTransient<ProductsEditPageView>();
             services.AddTransient<ProductsPageView>();
